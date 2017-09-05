@@ -31,3 +31,5 @@ Remote*.
 
 # .project
 *.project
+
+*.DS_Store
