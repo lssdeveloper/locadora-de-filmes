@@ -4,7 +4,10 @@ import java.util.Date;
 import static org.junit.Assert.*;
 
 import static org.hamcrest.CoreMatchers.*;
+
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 
 import br.rj.lssdeveloper.entidades.Filme;
 import br.rj.lssdeveloper.entidades.Locacao;
@@ -14,16 +17,19 @@ import br.rj.lssdeveloper.utils.DataUtils;
 
 public class LocacaoServiceTest {
 	
+	@Rule
+	public ErrorCollector error = new ErrorCollector();
+	
 	@Test
-	public void teste() {
+	public void testeLocacao() {
 		
 		//cenario
-		LocacaoService ls = new LocacaoService();
+		LocacaoService servico = new LocacaoService();
 		Usuario usuario = new Usuario("Roberval");
 		Filme filme = new Filme("O cara de pau.", 2, 15.00);
 		
 		//ação
-		Locacao locacao = ls.alugarFilme(usuario, filme);
+		Locacao locacao = servico.alugarFilme(usuario, filme);
 		
 		//verificação
 		//No caso abaixo apesar de funcionar por melhor prática usar o assertEquals
@@ -54,6 +60,32 @@ public class LocacaoServiceTest {
 				locacao.getDataLocacao(), new Date()), is(true));
 		assertThat(DataUtils.isMesmaData(
 				locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), is(true));	
+		
+		//Alguns autores mais radicais sugerem que o teste seja isolado
+		//ou seja no caso acima seria interessante 3 métodos isolados:
+		// um @Before para o cenário respectivo teste isolado para:
+		// - que verificasse o valor
+		// - que verificasse a data da locação
+		// - que verificasse a data de retorno
+		
+		// mas realilzar o teste como está acima é recomendado utilizar @Rule
+		
+		//ao invés de usar o assertThat
+		error.checkThat(locacao.getValor(), is(not(16.0)));
+
+		error.checkThat(DataUtils.isMesmaData(
+				locacao.getDataLocacao(), new Date()), is(true));
+		error.checkThat(DataUtils.isMesmaData(
+				locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), is(true));
+		//caso ocorra erros  SINTAXE ACIMA retornaria cada Failures e exibiria no Failure Trace
+		//como na simulação abaixo
+		
+			//error.checkThat(locacao.getValor(), is(16.0));
+
+			//error.checkThat(DataUtils.isMesmaData(
+						//locacao.getDataLocacao(), new Date()), is(true));
+			//error.checkThat(DataUtils.isMesmaData(
+						//locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), is(false));
 		
 	}
 
