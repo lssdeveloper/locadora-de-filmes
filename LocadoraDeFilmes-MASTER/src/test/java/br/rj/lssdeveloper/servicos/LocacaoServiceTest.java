@@ -29,7 +29,10 @@ public class LocacaoServiceTest {
 		Filme filme = new Filme("O cara de pau.", 2, 15.00);
 		
 		//ação
-		Locacao locacao = servico.alugarFilme(usuario, filme);
+		Locacao locacao;
+		try {
+			locacao = servico.alugarFilme(usuario, filme);
+
 		
 		//verificação
 		//No caso abaixo apesar de funcionar por melhor prática usar o assertEquals
@@ -86,6 +89,10 @@ public class LocacaoServiceTest {
 						//locacao.getDataLocacao(), new Date()), is(true));
 			//error.checkThat(DataUtils.isMesmaData(
 						//locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), is(false));
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
 		
 	}
 
