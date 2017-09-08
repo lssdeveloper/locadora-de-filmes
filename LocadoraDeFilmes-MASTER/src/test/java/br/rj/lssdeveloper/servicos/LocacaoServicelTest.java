@@ -21,8 +21,7 @@ import br.rj.lssdeveloper.entidades.Usuario;
 import br.rj.lssdeveloper.exceptions.FilmeSemEstoqueExcepetion;
 import br.rj.lssdeveloper.exceptions.LocadoraException;;
 
-public class LocacaoServiceFinalTest {
-	// Resultado final sem os comentários da LocacaoServiceTest
+public class LocacaoServicelTest {
 
 	private LocacaoService service;
 	private Usuario usuario;
@@ -58,45 +57,14 @@ public class LocacaoServiceFinalTest {
 		error.checkThat(locacao.getValor(), is(equalTo(15.00)));
 		error.checkThat(isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
 		error.checkThat(isMesmaData(locacao.getDataRetorno(), obterDataComDiferencaDias(1)), is(true));
-
-		/*
-		 * ============Diferença entre falha e erro=============== Falhas
-		 * ocorrem quando o teste é executado sem problemas, porém alguma
-		 * condição que era esperada não foi atendida. No caso, representada
-		 * pela forma de assertivas.
-		 *
-		 * Erro, quando algum problema durante a exeução do teste, impede que o
-		 * mesmo seja concluído! Ou seja, quando ocorre alguma exceçao não
-		 * esperada ou não tratada.
-		 */
-
 	}
 
-	/*
-	 * 1ª Forma ELEGANTE, pois é esperada uma exceção. Deixo o JUnit controlar.
-	 * Esta é formamas usada encontrada nos projetos em geral porém deve ser
-	 * utilizada criando a exception personalizada Ex: LocadoraException e então
-	 * para cada caso uma respectiva mensagem como no exemplo usuario e filme
-	 * vazio FilmeSemEstoqueException pode ser removida e substituída por
-	 * LocadoraException deixei aqui por questões de exemplo
-	 * 
-	 * Quando usar:
-	 * Quando a penas a exceção importar para você
-	 */
 	@Test(expected = FilmeSemEstoqueExcepetion.class)
 	public void testLocacao_filmeSemEstouqe_1() throws Exception {
 		filme = new Filme("O cara de pau.", 0, 15.00);
 		service.alugarFilme(usuario, filme);
 	}
 
-	/*
-	 * 2ª Forma ROBUSTA, oferece um maior controle e percepção, esta é a
-	 * diferença entre a elegante acima. Neste caso, eu quem controlo o
-	 * tratamento de exceção. Através do try / catch
-	 * RECOMENDADO USAR NA MAIORIA DOS CASOS (PRINCIPALMENTE COM MOCKS)
-	 * Quando usar:
-	 * Quando a exceção importa e precisa checar a mensagem
-	 */
 	@Test
 	public void testLocacao_filmeSemEstouqe_2() {
 		filme = new Filme("O cara de pau.", 0, 15.00);
@@ -109,19 +77,12 @@ public class LocacaoServiceFinalTest {
 		}
 	}
 
-	/*
-	 * 3ª Forma DIFRENTE DO USUAL, pois é esperada uma exceção. Usando @Role
-	 *
-	 * Quando usar:
-	 * Quando a exceção importa e precisa checar a mensagem
-	 * 
-	 */
 	@Test
 	public void testLocacao_filmeSemEstouqe_3() throws Exception {
 		// cenário
 		filme = new Filme("O cara de pau.", 0, 15.00);
 		// está deve ser definida dentro do cenário
-		// sempre antes da execução para o JUnit entender.
+		//e antes de executar a ação
 		exception.expect(Exception.class);
 		exception.expectMessage("Filme sem estoque!");
 		// ação
@@ -151,16 +112,5 @@ public class LocacaoServiceFinalTest {
 		
 		System.out.println("Forma nova");
 	}
-	/*
-	 * Pergunta, qual a melhor? Qual devo usar afinal?
-	 * 
-	 * Explicações: 1º Elegente = Só é recomendável utlizla se for especificar a
-	 * exceção como no exemplo acima criando uma excepetion extendendo de
-	 * exception, pois se houver muitas outras exceções, não consegue verificar
-	 * a mensagem realmente. Utilize está técnina se for criar uma exception
-	 * personalizada.
-	 * 
-	 * Usar quando você consegue garantir que a exceção será lançada apenas por um motivo!
-	 */
 
 }
