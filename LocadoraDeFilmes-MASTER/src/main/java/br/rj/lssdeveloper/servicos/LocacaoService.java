@@ -7,18 +7,24 @@ import java.util.Date;
 import br.rj.lssdeveloper.entidades.Filme;
 import br.rj.lssdeveloper.entidades.Locacao;
 import br.rj.lssdeveloper.entidades.Usuario;
+import br.rj.lssdeveloper.exceptions.FilmeSemEstoqueExcepetion;
+import br.rj.lssdeveloper.exceptions.LocadoraException;
 
 public class LocacaoService {
 	
-	public String vPublica;
-	protected String vProtegida;
-	private String vPrivada;
-	String vDefault;
+	@SuppressWarnings("unused")
+	public Locacao alugarFilme(Usuario usuario, Filme filme) throws FilmeSemEstoqueExcepetion, LocadoraException {
+		
+		//Este exemplo é como encontramos nos projetos em geral (1º caso = Forma elegante)
+		if(usuario==null)
+			throw new LocadoraException("Usuário vazio!");
+		
 
-	public Locacao alugarFilme(Usuario usuario, Filme filme) throws Exception {
+		if(filme==null)
+			throw new LocadoraException("Filme vazio!");
 		
 		if (filme.getEstoque() == 0) 
-			throw new Exception("Filme sem estoque!");		
+			throw new FilmeSemEstoqueExcepetion("Filme sem estoque!");	
 		
 		Locacao locacao = new Locacao();
 		locacao.setFilme(filme);
